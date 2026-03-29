@@ -23,6 +23,10 @@ jobs:
           cd build_dobby
           cmake ../third_party/Dobby
           make -j$(sysctl -n hw.ncpu)
+          
+          - name: Inspect Dobby build output
+        run: |
+          ls -R build_dobby
 
       - name: Build dylib
         run: |
