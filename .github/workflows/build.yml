@@ -10,10 +10,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          brew install cmake
+
+      - name: Build Dobby
+        run: |
+          mkdir -p build_dobby
+          cd build_dobby
+          cmake ../third_party/Dobby
+          make -j$(sysctl -n hw.ncpu)
 
       - name: Build dylib
         run: |
-          clang++ -dynamiclib -o libmmc.dylib main.cpp
+          clang++ -dynamiclib \
+            main.cpp \
+            -Ithird_party/Dobby/include \
+            build_dobby/libdobby.a \
+            -o libmmc.dylib
 
       - name: Upload dylib
         uses: actions/upload-artifact@v4
