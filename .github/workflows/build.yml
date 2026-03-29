@@ -25,6 +25,12 @@ jobs:
           cmake ../third_party/Dobby
           make -j$(sysctl -n hw.ncpu)
 
+      - name: Verify Dobby artifacts
+        run: |
+          echo "Checking build_dobby contents..."
+          ls -R build_dobby
+          find build_dobby -name "*.a" -o -name "*.dylib"
+
       - name: Inspect Dobby build output
         run: |
           ls -R build_dobby
