@@ -18,29 +18,17 @@ jobs:
         run: |
           brew install cmake
 
-      - name: Build Dobby
+      - name: Verify Dobby files
         run: |
-          mkdir -p build_dobby
-          cd build_dobby
-          cmake ../third_party/Dobby
-          make -j$(sysctl -n hw.ncpu)
-
-      - name: Verify Dobby artifacts
-        run: |
-          echo "Checking build_dobby contents..."
-          ls -R build_dobby
-          find build_dobby -name "*.a" -o -name "*.dylib"
-
-      - name: Inspect Dobby build output
-        run: |
-          ls -R build_dobby
+          echo "Checking third_party/Dobby contents..."
+          ls -R third_party/Dobby
 
       - name: Build dylib
         run: |
           clang++ -dynamiclib \
             main.cpp \
-            -Ithird_party/Dobby/include \
-            build_dobby/libdobby.a \
+            -Ithird_party/Dobby \
+            third_party/Dobby/libdobby.a \
             -o libmmc.dylib
 
       - name: Upload dylib
